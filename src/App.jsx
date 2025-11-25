@@ -43,18 +43,18 @@ function App() {
       icon: faDatabase,
       component: DatabaseStatus
     },
-    // {
-    //   label: 'Sequence Mapping',
-    //   url: '/sequence_mapping',
-    //   icon: faDna,
-    //   component: SequenceMapping
-    // },
-    // {
-    //   label: 'Sequence Subtyping',
-    //   url: '/sequence_subtyping',
-    //   icon: faDna,
-    //   component: SequenceSubtyping
-    // },
+    {
+      label: 'Sequence Mapping',
+      url: '/sequence_mapping',
+      icon: faDna,
+      component: SequenceMapping
+    },
+    {
+      label: 'Sequence Subtyping',
+      url: '/sequence_subtyping',
+      icon: faDna,
+      component: SequenceSubtyping
+    },
     {
       label: 'Epitopes',
       url: '/epitopes',
@@ -81,26 +81,25 @@ function App() {
     },
   ]
 
-  const logout = () => {
-    window.localStorage.removeItem('token');
-    window.localStorage.removeItem('userData');
-    dispatch(logoff());
-    navigate('/login');
-  };
+  // const logout = () => {
+  //   window.localStorage.removeItem('token');
+  //   window.localStorage.removeItem('userData');
+  //   dispatch(logoff());
+  //   navigate('/login');
+  // };
 
-  useEffect(() => {
-    if (userToken) return
-    let token = JSON.parse(window.localStorage.getItem('token'));
-    // console.log('token', token);
-    if (token) response('userToken', token)
-  }, [response, userToken]);
+  // useEffect(() => {
+  //   if (userToken) return
+  //   let token = JSON.parse(window.localStorage.getItem('token'));
+  //   if (token) response('userToken', token)
+  // }, [response, userToken]);
 
   // useEffect(() => {
   //   alert("Muito obrigado pela sua colaboração no processamento, sem você isto não seria possível! você é uma pessoa incrível, um forte abraço!")
   // },[])
 
-// if (!logado && !userToken && !userData) return <Login />
-// if (window.location.pathname !== '/process') navigate('/process');
+  // if (!logado && !userToken && !userData) return <Login />
+  // if (window.location.pathname !== '/process') navigate('/process');
   return (
     <>
       <Navbar style={{ backgroundColor: '#222629' }} className="d-lg-flex p-0">
@@ -111,25 +110,22 @@ function App() {
             <Nav className="mr-auto">
               {pages.map(page =>
                 <li size="md" key={page.url} className="nav-item">
-                  <NavLink className="nav-link" to={page.url} style={{ textDecoration: 'none', color: '#99A0AB' }} activeClassName="active" exact><FontAwesomeIcon icon={page.icon} /> {page.label}</NavLink>
+                  <NavLink
+                    className="nav-link"
+                    to={page.url}
+                    style={{ textDecoration: 'none', color: '#99A0AB' }}
+                    exact="true">
+                    <FontAwesomeIcon icon={page.icon} /> {page.label}
+                  </NavLink>
                 </li>
               )}
             </Nav>
-            <Nav.Item>
-              <Navbar.Brand>
-                <Link to='./login' style={{ textDecoration: 'none' }} onClick={logout}>
-                  <Button variant="danger" size="md">
-                    <FontAwesomeIcon icon={faUsers}></FontAwesomeIcon> Logout
-                    </Button>
-                </Link>
-              </Navbar.Brand>
-            </Nav.Item>
           </Navbar.Collapse>
         </Container>
       </Navbar>
       <Routes>
-        {pages.map((page, index) => <Route path={page.url} element={<page.component />} key={index} exact />)}
-        <Route path="/home" element={<Home />} exact />
+        {pages.map((page, index) => <Route path={page.url} element={<page.component />} key={index} exact="true" />)}
+        <Route path="/home" element={<Home />} exact="true" />
         <Route path="/" element={<Home />} />
       </Routes>
     </>

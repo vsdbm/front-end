@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { MapDispatch } from '../store/index.js';
 
 import PageHeader from '../components/PageTitle';
+import Select from '../components/Select';
 
 import colors from '../static/colors.js';
 
@@ -109,10 +110,20 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
         <Col md="3"></Col>
         <Col md="6" className="text-center">
           <Form.Label style={{ color: '#fff', fontWeight: 'bold' }}>Select a virus:</Form.Label>
-          <Form.Control as="select" onChange={handleVirusSelect} style={{ backgroundColor: colors.color7, color: '#fff' }} value={(virus) ? virus.id : 0}>
-            <option value="0">Select a virus, please</option>
-            {viruses.map(element => <option value={element.id} key={element.id}>{element.name}</option>)}
-          </Form.Control>
+          <Select
+            id='virus-select'
+            name='virus-select'
+            options={viruses ? viruses.map(v => ({ label: v.name, value: v.id })) : []}
+            onChange={(opt) => handleVirusSelect(opt.value)}
+            value={virus ? { label: virus.name, value: virus.id } : null}
+            placeholder="Select a virus..."
+            styles={{
+              control: (base) => ({ ...base, backgroundColor: colors.color7, color: '#fff' }),
+              singleValue: (base) => ({ ...base, color: '#fff' }),
+              input: (base) => ({ ...base, color: '#fff' }),
+              menu: (base) => ({ ...base, backgroundColor: colors.color7 })
+            }}
+          />
         </Col>
       </Row>
       <Row >

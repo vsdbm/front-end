@@ -14,6 +14,7 @@ import { getCode, getName } from 'country-list';
 
 import '../static/css/map.css';
 import countries from '../static/countries.js';
+import Select from '../components/Select.jsx';
 
 const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   const [virusData, setVirusData] = useState(virus || { name: '', sequences_amount: 0 });
@@ -75,22 +76,22 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
     let accumulator = 0;
     let pandemicAdvice = false
     const isPandemicDate = (date) => {
-      if (date.getFullYear() > 2019){
+      if (date.getFullYear() > 2019) {
         return date.getFullYear() === 2020 && date.getMonth() === 0;
       }
       return date.getFullYear() === 2019 && date.getMonth() === 11;
     }
     values.forEach(element => {
-      if (virus.refseq === 'NC_045512.2' && isPandemicDate(element.x) && !pandemicAdvice){
-        element.indexLabel= "pandemic beginning"
-        element.markerColor= "red"
-        element.markerType= "triangle"
+      if (virus.refseq === 'NC_045512.2' && isPandemicDate(element.x) && !pandemicAdvice) {
+        element.indexLabel = "pandemic beginning"
+        element.markerColor = "red"
+        element.markerType = "triangle"
         pandemicAdvice = true
       }
       element.y += accumulator;
       accumulator = element.y;
     })
-    console.log({values})
+    console.log({ values })
     setChartPoints(values);
   }
 
@@ -120,9 +121,6 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
         Array.from(document.querySelectorAll('.jvectormap-tip')).forEach(element => element.parentNode.removeChild(element));
       }, 200);
     });
-    // console.log(dto);
-    // console.log(document.querySelector('.jvectormap-container').firstChild);
-    // document.querySelector('.jvectormap-container').firstChild.setAttribute('height', '600px');
     setWorldData(dto);
   }
 
@@ -208,11 +206,11 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   //   //eslint-disable-next-line
   // }, [virusData]);
 
-  const handleVirusSelect = async e => {
-    e.preventDefault();
-    const virus_id = Number(e.target.value);
+  const handleVirusSelect = async value => {
+    const virus_id = Number(value);
     if (Number(virus_id) !== 0) {
       let data = await request('/virus/', virus_id);
+      console.log({ data });
       if (data.status === 'success') {
         setVirusData({ ...data.data, id: virus_id });
         response('virus', { ...data.data, id: virus_id });
@@ -248,9 +246,7 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
       <Container >
         <BlackCard >
           <Card.Body className="p-2 text-center">
-            <h1 style={{ marginBottom: "0.10em", color: '#fff' }}>
-              <CardTitle>{virusData.sequences_amount ? virusData.sequences_amount : ''}</CardTitle>
-            </h1>
+            <CardTitle style={{ marginBottom: "0.10em", color: '#fff' }}>{virusData.sequences_amount ? virusData.sequences_amount : ''}</CardTitle>
             <div style={{ paddingTop: '10px', fontSize: '14px', color: '#fff' }}>{virusData.name}</div>
             <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{virusData.refseq && <a href={`https://www.ncbi.nlm.nih.gov/nuccore/${virusData.refseq}`} target="_blank" rel="noopener noreferrer" style={{ cursor: 'poninter', textDecoration: 'none' }}>{virusData.refseq}</a>}</div>
             <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(coverage) ? `The sequences have an average of ${parseFloat(coverage).toFixed(2)}% coverage in the reference sequence` : ''}</div>
@@ -270,11 +266,21 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
         <Row className="my-md-1">
           <Col md="3"></Col>
           <Col md="6" className="text-center">
-            <Form.Label style={{ color: '#fff', fontWeight: 'bold' }}>Select a virus:</Form.Label>
-            <Form.Control as="select" onChange={handleVirusSelect} style={{ backgroundColor: colors.color7, color: '#fff' }} value={(virus) ? virus.id : 0}>
-              <option value="0">Select a virus, please</option>
-              {viruses && viruses.map(element => <option value={element.id} key={element.id}>{element.name}</option>)}
-            </Form.Control>
+            <Form.Label style={{ color: '#fff', fontWeight: 'bold' }} htmlFor='virus-select'>Select a virus:</Form.Label>
+            <Select
+              id='virus-select'
+              name='virus-select'
+              options={viruses ? viruses.map(v => ({ label: v.name, value: v.id })) : []}
+              onChange={(opt) => handleVirusSelect(opt.value)}
+              value={virus ? { label: virus.name, value: virus.id } : null}
+              placeholder="Select a virus..."
+              styles={{
+                control: (base) => ({ ...base, backgroundColor: colors.color7, color: '#fff' }),
+                singleValue: (base) => ({ ...base, color: '#fff' }),
+                input: (base) => ({ ...base, color: '#fff' }),
+                menu: (base) => ({ ...base, backgroundColor: colors.color7 })
+              }}
+            />
           </Col>
         </Row>
         <Row className="row-cards">
@@ -295,18 +301,18 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
               </Card.Header>
               <Card.Body>
                 <span
-                className={`badge badge-${hoverLabel?.includes(': 0') ? 'danger' : 'primary'}`}
-                style={{ position: 'relative', display: 'inline-block', fontWeight: 'bold', fontSize: '16px', color: colors.color0 }}
+                  className={`badge badge-${hoverLabel?.includes(': 0') ? 'danger' : 'primary'}`}
+                  style={{ position: 'relative', display: 'inline-block', fontWeight: 'bold', fontSize: '16px', color: colors.color0 }}
                 >{hoverLabel ?? 'Select a country'}</span>
                 {(Object.keys(woldData).length > 0) ?
                   <div style={{ width: 1068, height: 700 }}>
                     <VectorMap
                       map={"world_mill"}
                       ref={(map) => {
-                        if(globalMapRef.current) {
+                        if (globalMapRef.current) {
                           globalMapRef.current.tip.remove();
                         }
-                        if(map) {
+                        if (map) {
                           globalMapRef.current = map.$mapObject
                         }
                       }}
@@ -319,7 +325,7 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
                       }}
                       zoomButtons={true}
                       onRegionOver={
-                        function(evt, country) {
+                        function (evt, country) {
                           const message = `${getName(country)}: ${woldData?.[country] ?? 0}`;
                           // console.log({evt, country})
                           setHoverLabel(message);

@@ -36,3 +36,13 @@ body {
   color: #0078D4 !important;
   background: transparent !important;
 }
+
+.custom-dropdown-item {
+  background-color: var(--color7);
+  color: #fff;
+}
+
+.custom-dropdown-item:hover {
+  background-color: var(--color6);
+  color: #fff;
+}

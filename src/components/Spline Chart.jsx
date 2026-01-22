@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CanvasJSReact from '../static/chats/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+import colors from '../static/colors.js';
 
 function monthDiff(d1, d2) {
   if(!d1 || !d2) return 0;
@@ -12,6 +13,8 @@ function monthDiff(d1, d2) {
 }
 
 export const SplineChart = ({ name, infos }) => {
+  if (!infos?.length) return null;
+  while (infos?.[0]?.x?.getFullYear() < 1970) infos.shift();
   const totalMonthDiff = useMemo(() => monthDiff(infos?.[0]?.x, infos?.[infos?.length - 1]?.x), [infos]);
   const options = {
     animationEnabled: true,
@@ -28,12 +31,20 @@ export const SplineChart = ({ name, infos }) => {
       // prefix: "$",
       includeZero: true
     },
-    data: [{
+    data: [
+      {
       yValueFormatString: "###,###,###",
       xValueFormatString: "MMMM YYYY",
       type: "spline",
-      dataPoints: infos
-    }]
+      dataPoints: infos,
+      toolTipContent: `
+      <span style='"'color: ${colors.color4};font-weight: bold;'"'>{x}:</span>
+      <br/>
+      This period: <span style='"'color: ${colors.color5};font-weight: bold;'"'>{count}</span>
+      <br/>
+      Cumulative: <span style='"'color: ${colors.color5};font-weight: bold;'"'>{y}</span>`,
+    },
+  ]
   }
   if (infos) {
     return (

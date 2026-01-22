@@ -72,8 +72,11 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
 
   const plotGrowthGraph = async () => {
     let data = await request('/sequence/count/day/');
-    let values = data.data.map(element => ({ x: new Date(element.creationdate), y: element.count }));
-    let accumulator = 0;
+    console.log({data});
+    let values = data.data.map((element, i, arr) => ({
+      x: new Date(element.creationdate),
+      count: element.count
+    }));
     let pandemicAdvice = false
     const isPandemicDate = (date) => {
       if (date.getFullYear() > 2019) {
@@ -81,6 +84,7 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
       }
       return date.getFullYear() === 2019 && date.getMonth() === 11;
     }
+    let accumulator = 0;
     values.forEach(element => {
       if (virus.refseq === 'NC_045512.2' && isPandemicDate(element.x) && !pandemicAdvice) {
         element.indexLabel = "pandemic beginning"
@@ -88,8 +92,8 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
         element.markerType = "triangle"
         pandemicAdvice = true
       }
-      element.y += accumulator;
-      accumulator = element.y;
+      accumulator += (element.count || 0);
+      element.y = accumulator;
     })
     console.log({ values })
     setChartPoints(values);
@@ -209,6 +213,7 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   const handleVirusSelect = async value => {
     const virus_id = Number(value);
     if (Number(virus_id) !== 0) {
+      eraseData();
       let data = await request('/virus/', virus_id);
       console.log({ data });
       if (data.status === 'success') {
@@ -246,18 +251,18 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
       <Container >
         <BlackCard >
           <Card.Body className="p-2 text-center">
-            <CardTitle style={{ marginBottom: "0.10em", color: '#fff' }}>{virusData.sequences_amount ? virusData.sequences_amount : ''}</CardTitle>
-            <div style={{ paddingTop: '10px', fontSize: '14px', color: '#fff' }}>{virusData.name}</div>
+            <div style={{ paddingTop: '10px', fontSize: '22px', color: '#fff' }}>{virusData.name}</div>
+            <CardTitle style={{ marginBottom: "0.10em", color: '#fff' }}>{virusData.sequences_amount ? Intl.NumberFormat().format(virusData.sequences_amount) : ''}</CardTitle>
             <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{virusData.refseq && <a href={`https://www.ncbi.nlm.nih.gov/nuccore/${virusData.refseq}`} target="_blank" rel="noopener noreferrer" style={{ cursor: 'poninter', textDecoration: 'none' }}>{virusData.refseq}</a>}</div>
             <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(coverage) ? `The sequences have an average of ${parseFloat(coverage).toFixed(2)}% coverage in the reference sequence` : ''}</div>
-            <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(translationAmount) ? `At this moment we have a total of ${translationAmount} sequence features/translations` : ''}</div>
-            <div style={{ paddingTop: '15px', fontSize: '14px', color: '#fff' }}>{(epitopesInfos) ? `We have annoted ${epitopesInfos.annoted} epitopes, but we have also ${epitopesInfos.iedb_count} epitopes which becames from IEDB which gaves us this informations about our epitope annotations:` : ''}</div>
+            <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(translationAmount) ? `At this moment we have a total of ${Intl.NumberFormat().format(translationAmount)} sequence features/translations` : ''}</div>
+            <div style={{ paddingTop: '15px', fontSize: '14px', color: '#fff' }}>{(epitopesInfos) ? `We have annoted ${Intl.NumberFormat().format(epitopesInfos.annoted)} epitopes, but we have also ${Intl.NumberFormat().format(epitopesInfos.iedb_count)} epitopes which becames from IEDB which gaves us this informations about our epitope annotations:` : ''}</div>
             {
               (epitopesInfos) ?
                 <ul style={{ listStyle: 'none' }}>
-                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{epitopesInfos.bcell_count}</b> epitopes had studies for B cell</li>
-                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{epitopesInfos.tcell_count}</b> epitopes had studies for T cell</li>
-                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{epitopesInfos.mhc_bind_count}</b> epitopes had studies for MHC</li>
+                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{Intl.NumberFormat().format(epitopesInfos.bcell_count)}</b> epitopes had studies for B cell</li>
+                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{Intl.NumberFormat().format(epitopesInfos.tcell_count)}</b> epitopes had studies for T cell</li>
+                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{Intl.NumberFormat().format(epitopesInfos.mhc_bind_count)}</b> epitopes had studies for MHC</li>
                 </ul>
                 : ''
             }
@@ -287,7 +292,7 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
           <Col lg="12" xl="12" className="my-md-3">
             <BlackCard >
               <Card.Header>
-                <span style={{ fontSize: '22px', fontWeight: "bold" }}>Database Growth</span>
+                <span style={{ fontSize: '22px', fontWeight: "bold", color: colors.color1 }}>Database Growth</span>
               </Card.Header>
               <Card.Body>
                 <LineChart name={virusData.name} infos={chartPoints} />
@@ -297,13 +302,13 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
           <Col lg="12" md="12" className="my-md-3">
             <BlackCard>
               <Card.Header>
-                <span style={{ fontSize: '22px', fontWeight: "bold" }}>Sequence Submission</span>
-              </Card.Header>
-              <Card.Body>
+                <span style={{ fontSize: '22px', fontWeight: "bold", color: colors.color1 }}>Sequence Submission</span>
                 <span
                   className={`badge badge-${hoverLabel?.includes(': 0') ? 'danger' : 'primary'}`}
                   style={{ position: 'relative', display: 'inline-block', fontWeight: 'bold', fontSize: '16px', color: colors.color0 }}
                 >{hoverLabel ?? 'Select a country'}</span>
+              </Card.Header>
+              <Card.Body style={{ width: "100%", minHeight: 700 }}>
                 {(Object.keys(woldData).length > 0) ?
                   <div style={{ width: 1068, height: 700 }}>
                     <VectorMap
@@ -323,24 +328,24 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
                         width: '100%',
                         height: '100%'
                       }}
-                      zoomButtons={true}
+                      zoomButtons={false}
                       onRegionOver={
                         function (evt, country) {
-                          const message = `${getName(country)}: ${woldData?.[country] ?? 0}`;
+                          const message = `${getName(country)}: ${Intl.NumberFormat().format(woldData?.[country] ?? 0)}`;
                           // console.log({evt, country})
                           setHoverLabel(message);
                           evt.preventDefault();
                         }
                       }
                       onRegionTipShow={(event, element, country) => {
-                        const message = `${getName(country)}: ${woldData?.[country] ?? 0}`;
+                        const message = `${getName(country)}: ${Intl.NumberFormat().format(woldData?.[country] ?? 0)}`;
                         element.html(message);
                       }}
                       onRegionClick={
                         function (evt, fn, country) {
                           evt.preventDefault();
                           setFocused(fn)
-                          const message = `${getName(country)}: ${woldData?.[country] ?? 0}`;
+                          const message = `${getName(country)}: ${Intl.NumberFormat().format(woldData?.[country] ?? 0)}`;
                           setHoverLabel(message);
                           // Array.from(document.querySelectorAll('.jvectormap-tip')).forEach(element => element.parentNode.removeChild(element));
                         }

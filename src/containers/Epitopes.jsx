@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Card, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import api from '../services/api.js';
@@ -14,14 +14,18 @@ import colors from '../static/colors.js';
 function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
   const [viruses, setViruses] = useState([]);
   const [amount, setAmount] = useState(50);
+  const [onlyWithAssays, setOnlyWithAssays] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!viruses) {
       (async () => {
+        setIsLoading(true);
         let data = await request('/virus/', false, false);
         if (data.status === 'success') {
           response('viruses', Object.values(data.data));
         }
+        setIsLoading(false);
       })()
     }
     //eslint-disable-next-line
@@ -31,29 +35,20 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
 
   useEffect(() => {
     if (virus) {
-      (async () => {
-        let data = await request('/epitope/assay/top/', virus.id);
-        if (data.status === 'success') {
-          console.log('foi feito um novo request');
-          response('epitopes', Object.values(data.data));
-        }
-      })()
+      updateEpitopes();
     }
     //eslint-disable-next-line
   }, [virus])
 
   const handleVirusSelect = async e => {
-    e.preventDefault();
-    const virus_id = Number(e.target.value);
+    if (Number.isNaN(e)) return;
+    const virus_id = Number(e);
     if (Number(virus_id) !== 0) {
       let data = await request('/virus/', virus_id);
       if (data.status === 'success') {
         console.log(data.data);
         setVirus({ ...data.data, id: virus_id });
-        data = await request('/epitope/assay/top/', virus_id);
-        if (data.status === 'success') {
-          response('epitopes', Object.values(data.data));
-        }
+        response('virus', { ...data.data, id: virus_id });
       }
     } else {
       eraseData();
@@ -70,19 +65,37 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
     //eslint-disable-next-line
   }, [userToken]);
 
-  const request = async (endpoint, virus_id = null, use_parameter = true) => {
+  const request = async (endpoint, virus_id = null, use_parameter = true, params = {}) => {
     let headers = { Authorization: `Bearer ${userToken}` };
-    if (use_parameter) {
-      return (await api.get(`${endpoint}${(virus_id) ? virus_id : virus.id}`, { headers })).data;
-    } else {
-      return (await api.get(endpoint, { headers })).data;
+    let getParams = '';
+    if (Object.keys(params).length > 0) {
+      getParams = `?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
     }
+    if (use_parameter) {
+      return (await api.get(`${endpoint}${virus_id || virus.id}${getParams}`, { headers })).data;
+    }
+    return (await api.get(endpoint, { headers })).data;
+  }
+
+  const updateEpitopes = async () => {
+    console.log('updateEpitopes', virus);
+    response('epitopes', []);
+    if (!virus) return
+    setIsLoading(true);
+    let data = await request('/epitope/assay/top/', virus.id, true, { limit: amount, onlyWithAssays });
+    if (data.status === 'success') response('epitopes', Object.values(data.data));
+    setIsLoading(false);
   }
 
   const handleAmountChange = e => {
     e.preventDefault();
     setAmount(Number(e.target.value));
   }
+
+  useEffect(() => {
+    updateEpitopes();
+    //eslint-disable-next-line
+  }, [amount, onlyWithAssays]);
 
   const eraseData = () => {
     response('virus', null);
@@ -131,7 +144,21 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
           <BlackCard >
             <Card.Header>
               <CardTitle>Top Epitopes</CardTitle>
-              <select className="form-control" style={{ maxWidth: '10vw', display: 'inline-block', position: 'absolute', right: '1vw', color: '#fff', backgroundColor: 'var(--color7)' }} value={amount} onChange={handleAmountChange}>
+              <Form.Check
+                type="checkbox"
+                id="has-assays-filter"
+                label="Only with assays"
+                checked={onlyWithAssays}
+                disabled={isLoading}
+                onChange={(e) => {
+                  e.preventDefault();
+                  console.log({onlyWithAssays, eventValue: e.target.checked})
+                  setOnlyWithAssays(!onlyWithAssays);
+                }}
+                style={{ display: 'inline-block', position: 'absolute', right: '12vw', color: '#fff' }}
+              />
+              
+              <select disabled={isLoading} className="form-control" style={{ maxWidth: '10vw', display: 'inline-block', position: 'absolute', right: '1vw', color: '#fff', backgroundColor: 'var(--color7)' }} value={amount} onChange={handleAmountChange}>
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -144,12 +171,19 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                 <option value="1000">1000</option>
               </select>
             </Card.Header>
-            <Card.Body>
+            {isLoading ? (
+              <Card.Body style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Spinner animation="border" role="status" variant="light" >
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+              </Card.Body>
+            ) : (
+              <Card.Body>
               <span className="d-inline-block mb-2 my-2" style={{ color: '#fff', fontWeight: 'bold' }}>
                 {(virus && virus.id) ? `Data for ${virus.name}` : ''}
               </span>
               {epitopes && <Divider className="mb-2 my-2" />}
-              {epitopes && [...epitopes].slice(0, amount).map((epitope, index) => (
+              {epitopes && epitopes.map((epitope, index) => (
                 <div key={index}>
 
                   <Row>
@@ -163,7 +197,7 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                         </Col>
                         <Col lg="8">
                           {epitope.bcell_assays.length > 0 &&
-                            <Col lg="6">
+                            <Col lg="8">
                               <span style={{ color: '#fff', fontWeight: 'bold' }}>B cell</span>
                               <ul>
                                 {[...epitope.bcell_assays].map((bcell, index) =>
@@ -203,6 +237,7 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                 </div>
               ))}
             </Card.Body>
+          )}
           </BlackCard>
         </Col>
       </Row>

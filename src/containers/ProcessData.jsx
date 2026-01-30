@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { useTranslation } from 'react-i18next';
 import { Container, Card, FormCheck } from "react-bootstrap";
 import FormRange from "react-bootstrap/FormRange";
 import PageHeader from "../components/PageTitle";
@@ -18,6 +19,7 @@ const DEFAULT_WORKS_NAVIGATOR_AMOUNT = (navigator?.hardwareConcurrency ?? 8) * 4
 const DEFAULT_WORKS_AMOUNT = 4;
 
 export default function ProcessData() {
+  const { t } = useTranslation();
   const webWorkersEnabled = !!window.Worker;
   const [shouldProcess, setShouldProcess] = useState(true);
   const [worksAmount, setWorksAmount] = useState(DEFAULT_WORKS_AMOUNT);
@@ -139,9 +141,9 @@ export default function ProcessData() {
   }, [currentWorks, workers]);
 
   const getWorkLabel = (type) => {
-    if (type === "local-mapping") return "sequence subtype";
-    if (type === "global-mapping") return "sequence global alignment";
-    if (type === "epitope-mapping") return "epitope";
+    if (type === "local-mapping") return t('process_data.labels.local_mapping');
+    if (type === "global-mapping") return t('process_data.labels.global_mapping');
+    if (type === "epitope-mapping") return t('process_data.labels.epitope_mapping');
   };
 
   return (
@@ -150,27 +152,27 @@ export default function ProcessData() {
       <BlackCard>
         <Card.Header className="title-box">
           <CardTitle>
-            <span>Process mappings</span>
+            <span>{t('process_data.title')}</span>
             <FormCheck
               reverse
               type="switch"
               id="process-switch"
-              label={`${!shouldProcess ? "Enable" : "Disable"} process`}
+              label={!shouldProcess ? t('process_data.enable_process') : t('process_data.disable_process')}
               checked={shouldProcess}
               onChange={(e) => setShouldProcess(e.target.checked)}
             />
           </CardTitle>
         </Card.Header>
         <Card.Body style={{ color: "white" }}>
-          <h4>Connection status:</h4>
+          <h4>{t('process_data.connection_status')}</h4>
           <ul>
-            <li>Connected clients: {clients}</li>
+            <li>{t('process_data.connected_clients', { count: clients })}</li>
             <li>
-              latency: <PingSpan client={client} />
+              {t('process_data.latency')} <PingSpan client={client} />
             </li>
             {shouldProcess && (
               <>
-                <li>works per time: {worksAmount} </li>
+                <li>{t('process_data.works_per_time', { count: worksAmount })} </li>
                 <li style={{ position: "relative" }}>
                   <FormRange
                     style={{ width: "100%" }}
@@ -195,24 +197,23 @@ export default function ProcessData() {
                   </label>
                 </li>
                 <hr />
-                <li>running now {currentWorks.length} works</li>
+                <li>{t('process_data.running_works', { count: currentWorks.length })}</li>
                 <li>
-                  Elapsed time from last work force: {(eta / 1000).toFixed(3)}{" "}
-                  seconds
+                  {t('process_data.elapsed_time', { seconds: (eta / 1000).toFixed(3) })}
                 </li>
                 <hr />
                 {hasProcessedSomething && (
                   <>
-                    <li>Thank you for your computational effort, you already did:</li>
-                    <li>Global alignment: {processed?.["global-mapping"]}</li>
-                    <li>Subtyping: {processed?.["local-mapping"]}</li>
-                    <li>Epitope maps: {processed?.["epitope-mapping"]}</li>
+                    <li>{t('process_data.thank_you')}</li>
+                    <li>{t('process_data.global_alignment', { count: processed?.["global-mapping"] })}</li>
+                    <li>{t('process_data.subtyping', { count: processed?.["local-mapping"] })}</li>
+                    <li>{t('process_data.epitope_maps', { count: processed?.["epitope-mapping"] })}</li>
                     <hr />
                   </>
                 )}
                 {DEBUG_MODE && currentWorks?.map((work, index) => (
                   <li key={work.identifier}>
-                    Worker #{index + 1} - Mapping {getWorkLabel(work.type)}
+                    {t('process_data.worker_mapping', { index: index + 1, label: getWorkLabel(work.type) })}
                   </li>
                 ))}
               </>

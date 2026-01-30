@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Routes, Link, NavLink, useNavigate } from "react-router-dom";
 
-import { Navbar, Nav, Button, Container } from 'react-bootstrap';
+import { Navbar, Nav, Button, Container, NavDropdown } from 'react-bootstrap';
+import ReactCountryFlag from "react-country-flag"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faDatabase, faDna, faSyringe, faTools, faHdd, faUsers, faServer } from '@fortawesome/free-solid-svg-icons';
 import Logo from './static/img/logo.svg';
@@ -21,8 +23,10 @@ import {
   Login,
   ProcessData
 } from './containers';
+import colors from './static/colors';
 
 function App() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -32,31 +36,31 @@ function App() {
 
   const pages = [
     {
-      label: 'Home',
+      label: t('menu.home'),
       url: '/',
       icon: faHome,
       component: Home
     },
     {
-      label: 'Database Status',
+      label: t('menu.database_status'),
       url: '/database_status',
       icon: faDatabase,
       component: DatabaseStatus
     },
     {
-      label: 'Sequence Mapping',
+      label: t('menu.sequence_mapping'),
       url: '/sequence_mapping',
       icon: faDna,
       component: SequenceMapping
     },
     {
-      label: 'Sequence Subtyping',
+      label: t('menu.sequence_subtyping'),
       url: '/sequence_subtyping',
       icon: faDna,
       component: SequenceSubtyping
     },
     {
-      label: 'Epitopes',
+      label: t('menu.epitopes'),
       url: '/epitopes',
       icon: faSyringe,
       component: Epitopes
@@ -74,7 +78,7 @@ function App() {
     //   component: Retrieve
     // },
     {
-      label: 'Process data',
+      label: t('menu.process_data'),
       url: '/process',
       icon: faServer,
       component: ProcessData
@@ -107,9 +111,9 @@ function App() {
           <Navbar.Brand><img src={Logo} width="43" height="43" alt="VSDBM V2" title="VSDBM V2"></img></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
+            <Nav className="me-auto">
               {pages.map(page =>
-                <li size="md" key={page.url} className="nav-item">
+                <li size="md" key={page.url} className="nav-item" style={{ minWidth: '150px', textAlign: 'center' }}>
                   <NavLink
                     className="nav-link"
                     to={page.url}
@@ -119,6 +123,40 @@ function App() {
                   </NavLink>
                 </li>
               )}
+            </Nav>
+            <Nav>
+              <NavDropdown 
+                title={
+                  <span style={{ color: '#99A0AB' }}>
+                    <ReactCountryFlag 
+                      countryCode={
+                        i18n.language === 'en' ? 'CA' :
+                        i18n.language === 'es' ? 'ES' :
+                        i18n.language === 'pt-BR' ? 'BR' :
+                        i18n.language === 'de' ? 'DE' : 'US'
+                      } 
+                      svg 
+                      style={{ marginRight: '5px' }} 
+                    />
+                    {i18n.language ? i18n.language.toUpperCase() : 'LAN'}
+                  </span>
+                } 
+                id="basic-nav-dropdown" 
+                menuVariant="dark"
+              >
+                <NavDropdown.Item onClick={() => i18n.changeLanguage('pt-BR')} style={{ display: 'flex', alignItems: 'center', color: '#99A0AB' }}>
+                  <ReactCountryFlag countryCode="BR" svg style={{ marginRight: '10px' }} /> PT-BR
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => i18n.changeLanguage('de')} style={{ display: 'flex', alignItems: 'center', color: '#99A0AB' }}>
+                  <ReactCountryFlag countryCode="DE" svg style={{ marginRight: '10px' }} /> DE
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => i18n.changeLanguage('en')} style={{ display: 'flex', alignItems: 'center', color: '#99A0AB' }}>
+                  <ReactCountryFlag countryCode="CA" svg style={{ marginRight: '10px' }} /> EN
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => i18n.changeLanguage('es')} style={{ display: 'flex', alignItems: 'center', color: '#99A0AB' }}>
+                  <ReactCountryFlag countryCode="ES" svg style={{ marginRight: '10px' }} /> ES
+                </NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

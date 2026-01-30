@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next';
 import { Container, Row, Col, Card, Form, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 
@@ -12,6 +13,7 @@ import Select from '../components/Select';
 import colors from '../static/colors.js';
 
 function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
+  const { t } = useTranslation();
   const [viruses, setViruses] = useState([]);
   const [amount, setAmount] = useState(50);
   const [onlyWithAssays, setOnlyWithAssays] = useState(true);
@@ -122,14 +124,14 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
       <Row className="md-2 my-4">
         <Col md="3"></Col>
         <Col md="6" className="text-center">
-          <Form.Label style={{ color: '#fff', fontWeight: 'bold' }}>Select a virus:</Form.Label>
+          <Form.Label style={{ color: '#fff', fontWeight: 'bold' }}>{t('epitopes.select_virus')}</Form.Label>
           <Select
             id='virus-select'
             name='virus-select'
             options={viruses ? viruses.map(v => ({ label: v.name, value: v.id })) : []}
             onChange={(opt) => handleVirusSelect(opt.value)}
             value={virus ? { label: virus.name, value: virus.id } : null}
-            placeholder="Select a virus..."
+            placeholder={t('epitopes.select_virus_placeholder')}
             styles={{
               control: (base) => ({ ...base, backgroundColor: colors.color7, color: '#fff' }),
               singleValue: (base) => ({ ...base, color: '#fff' }),
@@ -143,11 +145,11 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
         <Col lg="12" xl="12" >
           <BlackCard >
             <Card.Header>
-              <CardTitle>Top Epitopes</CardTitle>
+              <CardTitle>{t('epitopes.top_epitopes')}</CardTitle>
               <Form.Check
                 type="checkbox"
                 id="has-assays-filter"
-                label="Only with assays"
+                label={t('epitopes.only_with_assays')}
                 checked={onlyWithAssays}
                 disabled={isLoading}
                 onChange={(e) => {
@@ -180,7 +182,7 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
             ) : (
               <Card.Body>
               <span className="d-inline-block mb-2 my-2" style={{ color: '#fff', fontWeight: 'bold' }}>
-                {(virus && virus.id) ? `Data for ${virus.name}` : ''}
+                {(virus && virus.id) ? t('epitopes.data_for', { name: virus.name }) : ''}
               </span>
               {epitopes && <Divider className="mb-2 my-2" />}
               {epitopes && epitopes.map((epitope, index) => (
@@ -193,12 +195,12 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                           <a href={getIedbEpitopeUrl(epitope)} target="_blank" rel="noopener noreferrer">{epitope.linearsequence}</a>
                         </Col>
                         <Col lg="2">
-                          <span style={{ color: '#fff', fontWeight: 'bold' }}>Hits: {epitope.count}</span>
+                          <span style={{ color: '#fff', fontWeight: 'bold' }}>{t('epitopes.hits', { count: epitope.count })}</span>
                         </Col>
                         <Col lg="8">
                           {epitope.bcell_assays.length > 0 &&
                             <Col lg="8">
-                              <span style={{ color: '#fff', fontWeight: 'bold' }}>B cell</span>
+                              <span style={{ color: '#fff', fontWeight: 'bold' }}>{t('epitopes.b_cell')}</span>
                               <ul>
                                 {[...epitope.bcell_assays].map((bcell, index) =>
                                   <li style={{ color: '#fff' }} key={index}>
@@ -209,7 +211,7 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                           }
                           {epitope.tcell_assays.length > 0 &&
                             <Col lg="6">
-                              <span style={{ color: '#fff', fontWeight: 'bold' }}>T cell</span>
+                              <span style={{ color: '#fff', fontWeight: 'bold' }}>{t('epitopes.t_cell')}</span>
                               <ul>
                                 {[...epitope.tcell_assays].map((tcell, index) =>
                                   <li style={{ color: '#fff' }} key={index}>
@@ -220,7 +222,7 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                           }
                           {epitope.mhc_assays.length > 0 &&
                             <Col lg="6">
-                              <span style={{ color: '#fff', fontWeight: 'bold' }}>MHC</span>
+                              <span style={{ color: '#fff', fontWeight: 'bold' }}>{t('epitopes.mhc')}</span>
                               <ul>
                                 {[...epitope.mhc_assays].map((mhc, index) =>
                                   <li style={{ color: '#fff' }} key={index}><b>{mhc.allele_name}</b> - {mhc.result} - {mhc.value} nM</li>

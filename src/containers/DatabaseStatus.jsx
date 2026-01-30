@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { Container, Card, Row, Col, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { Container, Card, Row, Col, Form, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import colors from '../static/colors.js';
 
@@ -17,6 +18,7 @@ import countries from '../static/countries.js';
 import Select from '../components/Select.jsx';
 
 const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
+  const { t } = useTranslation();
   const [virusData, setVirusData] = useState(virus || { name: '', sequences_amount: 0 });
   const [chartPoints, setChartPoints] = useState(null);
   const [woldData, setWorldData] = useState({});
@@ -25,20 +27,11 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   const [translationAmount, setTranslationAmount] = useState(null);
   const [epitopesInfos, setEpitopesInfos] = useState(null);
   const [focused, setFocused] = useState('');
+  const [isLoadingGrowth, setIsLoadingGrowth] = useState(false);
+  const [isLoadingWorld, setIsLoadingWorld] = useState(false);
+  const [isLoadingVirus, setIsLoadingVirus] = useState(false);
 
   const globalMapRef = useRef(null);
-
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     if (document.querySelector('.jvectormap-container')) {
-  //       let chart = document.querySelector('.jvectormap-container').firstChild;
-  //       if (Number(chart.getAttribute('height')) !== 600) {
-  //         console.log('setting chart size');
-  //         chart.setAttribute('height', 600);
-  //       }
-  //     }
-  //   }, 5);
-  // }, []);
 
   useEffect(() => {
     console.log(focused);
@@ -53,17 +46,17 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
           response('viruses', Object.values(data.data));
         }
         (async () => {
-          setInterval(async () => {
-            console.log('updating infos');
-            if (virus && virus.id !== 0) {
-              if (virusData && 'id' in virusData) {
-                console.log('refreshing charts');
-                let data = await request('/virus/', virusData.id);
-                setVirusData(data);
-                response('virus', data);
-              }
+          console.log('updating infos');
+          if (virus && virus.id !== 0) {
+            if (virusData && 'id' in virusData) {
+              console.log('refreshing charts');
+              setIsLoadingVirus(true);
+              let data = await request('/virus/', virusData.id);
+              setVirusData(data);
+              response('virus', data);
+              setIsLoadingVirus(false);
             }
-          }, 5 * 60 * 1000);
+          }
         })()
       })()
     }
@@ -71,7 +64,9 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   }, [])
 
   const plotGrowthGraph = async () => {
+    setIsLoadingGrowth(true);
     let data = await request('/sequence/count/day/');
+    setIsLoadingGrowth(false);
     console.log({data});
     let values = data.data.map((element, i, arr) => ({
       x: new Date(element.creationdate),
@@ -87,7 +82,7 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
     let accumulator = 0;
     values.forEach(element => {
       if (virus.refseq === 'NC_045512.2' && isPandemicDate(element.x) && !pandemicAdvice) {
-        element.indexLabel = "pandemic beginning"
+        element.indexLabel = t('database_status.pandemic_beginning')
         element.markerColor = "red"
         element.markerType = "triangle"
         pandemicAdvice = true
@@ -100,7 +95,9 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   }
 
   const plotWorldGraph = async () => {
+    setIsLoadingWorld(true);
     let data = await request('/sequence/count/country/');
+    setIsLoadingWorld(false);
     let dto = {}
     data.data.forEach(element => {
       let code2 = getCode(element.country_name);
@@ -117,7 +114,7 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
             dto[last_try] = element.count;
           } else {
             console.warn(`Alpha2 code for ${element.country_name}`);
-            console.warn(`Please, contact irahe22@gmail.com`);
+            console.warn(`Please, contact heltonfabio@outlook.com`);
           }
         }
       }
@@ -144,24 +141,30 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   }
 
   const getCoverageData = async () => {
+    setIsLoadingVirus(true);
     let data = await request('/sequence/coverage/avg/');
+    setIsLoadingVirus(false);
     if (data.status === 'success') {
       setCoverage(Number(data.data.coverage_avg));
     }
   }
   const getFeaturesData = async () => {
+    setIsLoadingVirus(true);
     let data = await request('/sequence/translation/count/');
+    setIsLoadingVirus(false);
     if (data.status === 'success') {
       setTranslationAmount(Number(data.data.count));
     }
   }
 
   const getEpitopesInfos = async () => {
+    setIsLoadingVirus(true);
     const [annoted, iedb, assay] = await Promise.all([
       request('/epitope/count/', virus.id, true),
       request('/epitope/iedb/count/', virus.id, false),
       request('/epitope/iedb/assay/count/', virus.id, false),
     ]);
+    setIsLoadingVirus(false);
     console.log(annoted, iedb, assay);
     const epitope_object = { ...assay.data, iedb_count: iedb.data.count, annoted: annoted.data[0].count };
     setEpitopesInfos(epitope_object);
@@ -188,33 +191,23 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
   }, [virus])
 
   const composePage = async () => {
-    plotGrowthGraph();
-    plotWorldGraph();
-    getCoverageData();
-    getFeaturesData();
-    getEpitopesInfos();
+    await Promise.all([
+      plotGrowthGraph(),
+      plotWorldGraph(),
+      getCoverageData(),
+      getFeaturesData(),
+      getEpitopesInfos(),
+    ])
   }
 
-
-  // useEffect(() => {
-  //   if (virus && virus.id !== 0) {
-  //     setTimeout(async () => {
-  //       console.log('refreshing charts');
-  //       // plotGrowthGraph();
-  //       // plotWorldGraph();
-  //       let data = await request('/virus/', virusData.id);
-  //       setVirusData(data);
-  //       // }, 5 * 60 * 1000);
-  //     }, 500);
-  //   }
-  //   //eslint-disable-next-line
-  // }, [virusData]);
 
   const handleVirusSelect = async value => {
     const virus_id = Number(value);
     if (Number(virus_id) !== 0) {
       eraseData();
+      setIsLoadingVirus(true)
       let data = await request('/virus/', virus_id);
+      setIsLoadingVirus(false)
       console.log({ data });
       if (data.status === 'success') {
         setVirusData({ ...data.data, id: virus_id });
@@ -250,35 +243,43 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
     <div className="my3 my-md-5">
       <Container >
         <BlackCard >
+          {isLoadingVirus ? (
+            <Card.Body style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Spinner animation="border" role="status" variant="light" >
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </Card.Body>
+            ) : (
           <Card.Body className="p-2 text-center">
             <div style={{ paddingTop: '10px', fontSize: '22px', color: '#fff' }}>{virusData.name}</div>
             <CardTitle style={{ marginBottom: "0.10em", color: '#fff' }}>{virusData.sequences_amount ? Intl.NumberFormat().format(virusData.sequences_amount) : ''}</CardTitle>
             <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{virusData.refseq && <a href={`https://www.ncbi.nlm.nih.gov/nuccore/${virusData.refseq}`} target="_blank" rel="noopener noreferrer" style={{ cursor: 'poninter', textDecoration: 'none' }}>{virusData.refseq}</a>}</div>
-            <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(coverage) ? `The sequences have an average of ${parseFloat(coverage).toFixed(2)}% coverage in the reference sequence` : ''}</div>
-            <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(translationAmount) ? `At this moment we have a total of ${Intl.NumberFormat().format(translationAmount)} sequence features/translations` : ''}</div>
-            <div style={{ paddingTop: '15px', fontSize: '14px', color: '#fff' }}>{(epitopesInfos) ? `We have annoted ${Intl.NumberFormat().format(epitopesInfos.annoted)} epitopes, but we have also ${Intl.NumberFormat().format(epitopesInfos.iedb_count)} epitopes which becames from IEDB which gaves us this informations about our epitope annotations:` : ''}</div>
+            <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(coverage) ? t('database_status.coverage_info', { coverage: parseFloat(coverage).toFixed(2) }) : ''}</div>
+            <div style={{ paddingTop: '5px', fontSize: '14px', color: '#fff' }}>{(translationAmount) ? t('database_status.features_info', { count: Intl.NumberFormat().format(translationAmount) }) : ''}</div>
+            <div style={{ paddingTop: '15px', fontSize: '14px', color: '#fff' }}>{(epitopesInfos) ? t('database_status.epitopes_info', { annotated: Intl.NumberFormat().format(epitopesInfos.annoted), iedb: Intl.NumberFormat().format(epitopesInfos.iedb_count) }) : ''}</div>
             {
               (epitopesInfos) ?
                 <ul style={{ listStyle: 'none' }}>
-                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{Intl.NumberFormat().format(epitopesInfos.bcell_count)}</b> epitopes had studies for B cell</li>
-                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{Intl.NumberFormat().format(epitopesInfos.tcell_count)}</b> epitopes had studies for T cell</li>
-                  <li style={{ fontSize: '14px', color: '#fff' }}><b>{Intl.NumberFormat().format(epitopesInfos.mhc_bind_count)}</b> epitopes had studies for MHC</li>
+                  <li style={{ fontSize: '14px', color: '#fff' }}>{t('database_status.b_cell_studies', { count: Intl.NumberFormat().format(epitopesInfos.bcell_count) })}</li>
+                  <li style={{ fontSize: '14px', color: '#fff' }}>{t('database_status.t_cell_studies', { count: Intl.NumberFormat().format(epitopesInfos.tcell_count) })}</li>
+                  <li style={{ fontSize: '14px', color: '#fff' }}>{t('database_status.mhc_studies', { count: Intl.NumberFormat().format(epitopesInfos.mhc_bind_count) })}</li>
                 </ul>
                 : ''
             }
           </Card.Body>
+          )}
         </BlackCard>
         <Row className="my-md-1">
           <Col md="3"></Col>
           <Col md="6" className="text-center">
-            <Form.Label style={{ color: '#fff', fontWeight: 'bold' }} htmlFor='virus-select'>Select a virus:</Form.Label>
+            <Form.Label style={{ color: '#fff', fontWeight: 'bold' }} htmlFor='virus-select'>{t('database_status.select_virus')}</Form.Label>
             <Select
               id='virus-select'
               name='virus-select'
               options={viruses ? viruses.map(v => ({ label: v.name, value: v.id })) : []}
               onChange={(opt) => handleVirusSelect(opt.value)}
               value={virus ? { label: virus.name, value: virus.id } : null}
-              placeholder="Select a virus..."
+              placeholder={t('database_status.select_virus_placeholder')}
               styles={{
                 control: (base) => ({ ...base, backgroundColor: colors.color7, color: '#fff' }),
                 singleValue: (base) => ({ ...base, color: '#fff' }),
@@ -292,22 +293,37 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
           <Col lg="12" xl="12" className="my-md-3">
             <BlackCard >
               <Card.Header>
-                <span style={{ fontSize: '22px', fontWeight: "bold", color: colors.color1 }}>Database Growth</span>
+                <span style={{ fontSize: '22px', fontWeight: "bold", color: colors.color1 }}>{t('database_status.title')}</span>
               </Card.Header>
-              <Card.Body>
-                <LineChart name={virusData.name} infos={chartPoints} />
-              </Card.Body>
+              {isLoadingGrowth ? (
+                <Card.Body style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <Spinner animation="border" role="status" variant="light" >
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </Card.Body>
+              ) : (
+                <Card.Body>
+                  <LineChart name={virusData.name} infos={chartPoints} />
+                </Card.Body>
+              )}
             </BlackCard>
           </Col>
           <Col lg="12" md="12" className="my-md-3">
             <BlackCard>
               <Card.Header>
-                <span style={{ fontSize: '22px', fontWeight: "bold", color: colors.color1 }}>Sequence Submission</span>
+                <span style={{ fontSize: '22px', fontWeight: "bold", color: colors.color1 }}>{t('database_status.sequence_submission')}</span>
                 <span
                   className={`badge badge-${hoverLabel?.includes(': 0') ? 'danger' : 'primary'}`}
                   style={{ position: 'relative', display: 'inline-block', fontWeight: 'bold', fontSize: '16px', color: colors.color0 }}
-                >{hoverLabel ?? 'Select a country'}</span>
+                >{hoverLabel ?? ''}</span>
               </Card.Header>
+              {isLoadingWorld ? (
+                <Card.Body style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <Spinner animation="border" role="status" variant="light" >
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </Card.Body>
+              ) : (
               <Card.Body style={{ width: "100%", minHeight: 700 }}>
                 {(Object.keys(woldData).length > 0) ?
                   <div style={{ width: 1068, height: 700 }}>
@@ -386,9 +402,10 @@ const DatabaseStatus = ({ userToken, virus, viruses, response }) => {
                     />
                   </div>
                   :
-                  <p>Select an organism</p>
+                  <p>{t('database_status.select_organism')}</p>
                 }
               </Card.Body>
+              )}
             </BlackCard>
           </Col>
         </Row>

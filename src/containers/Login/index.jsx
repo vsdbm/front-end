@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api.js';
 
@@ -14,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { response, login } from '../../store/actions.js';
 
 export const Login = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
@@ -65,7 +67,7 @@ export const Login = () => {
     e.preventDefault();
     try {
       if (email.trim() === '' || password.trim() === '') {
-        setError('Please, insert your credentials');
+        setError(t('login.error_empty'));
         return;
       }
       let data = await api.post('/login/', { email, password });
@@ -76,11 +78,11 @@ export const Login = () => {
         }
         loginAndRedirect(data.data.data.token, data.data.data.user);
       } else {
-        setError('Please, verify your credentials');
+        setError(t('login.error_verify'));
         setPassword('');
       }
     } catch (error) {
-      setError('You had an error:', error.message)
+      setError(t('login.error_generic') + ' ' + error.message)
     }
   }
 
@@ -91,7 +93,7 @@ export const Login = () => {
   }
 
   const forgot = e => {
-    alert('You cannot lost what you do not have. ;)');
+    alert(t('login.forgot_alert'));
   }
   return (
     <Container>
@@ -106,7 +108,7 @@ export const Login = () => {
           <InputGroup className="mb-3">
             <InputGroup.Text id="basic-addon1"><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></InputGroup.Text>
             <NewInput
-              placeholder="Email"
+              placeholder={t('login.email_placeholder')}
               aria-label="Email"
               aria-describedby="email"
               onChange={handleDigitEmail}
@@ -116,7 +118,7 @@ export const Login = () => {
           <InputGroup className="mb-4">
             <InputGroup.Text id="basic-addon1"><FontAwesomeIcon icon={faKey}></FontAwesomeIcon></InputGroup.Text>
             <NewInput type="password"
-              placeholder="Password"
+              placeholder={t('login.password_placeholder')}
               aria-label="password"
               aria-describedby="password"
               onChange={handleDigitPassword}
@@ -125,12 +127,12 @@ export const Login = () => {
           </InputGroup>
           <Remember className="mb-2">
             <CheckBox type="checkbox" defaultChecked={stayLogged} onChange={handleStayLogged} />
-            <span>Remember me</span>
+            <span>{t('login.remember_me')}</span>
           </Remember>
-          <LoginBtn className="btn mb-3" as="input" type="submit" value="Login" onClick={handleLogin} disabled={disabled} />{' '}
+          <LoginBtn className="btn mb-3" as="input" type="submit" value={t('login.login_button')} onClick={handleLogin} disabled={disabled} />{' '}
         </CardBody>
         <ForgotPassword className="d-flex justify-content-center" onClick={forgot}>
-          <span>Forgot your password?</span>
+          <span>{t('login.forgot_password')}</span>
         </ForgotPassword>
       </LoginCard>
     </Container>

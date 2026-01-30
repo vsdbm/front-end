@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation, Trans } from 'react-i18next';
 import { Container, Card, Col, Row, CardGroup } from 'react-bootstrap';
 import PageHeader from '../components/PageTitle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,45 +7,45 @@ import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 export default function Home() {
+  const { t } = useTranslation();
   return (
     <NewContainer style={{ position: 'relative' }}>
-      <PageHeader text="VSDBM - Viral Sequence Database Manager" />
+      <PageHeader text={t('home.title')} />
       <Col lg="12">
         <Row>
           <CardGroup>
             <NewCard aside>
               <Card.Body>
                 <h4>
-                  <NewCardTitle className="title-box">
-                    What is VSDBM <FontAwesomeIcon icon={faQuestion} />
+                  <NewCardTitle className="title-box" style={{ color: '#99A0AB' }}>
+                    {t('home.what_is_title')} <FontAwesomeIcon icon={faQuestion} />
                   </NewCardTitle>
                 </h4>
                 <NewCardBody>
-                  VSDBM is a high performance hybrid multi-platform multi-language tool to collect, analise and store viral genomic sequences on demand. It is composed of three main modules:
+                  {t('home.what_is_text_1')}
                   <ul>
-                    <li>Backend module</li>
-                    <li>Database module</li>
-                    <li>Frontend module</li>
+                    <li>{t('home.what_is_list.backend')}</li>
+                    <li>{t('home.what_is_list.database')}</li>
+                    <li>{t('home.what_is_list.frontend')}</li>
                   </ul>
-                    The Backend module runs all analysis on a week or demand basis. This module collect all new sequences from main primary biological databases; Process it by mapping it with the complete annotated genome; Subtyping it using subtype groups pre-determined in literature and map all epitopes contained in IEDB. All data is stored in Database model and can be accessed by the frontend via REST services.
+                    {t('home.what_is_text_2')}
                 </NewCardBody>
               </Card.Body>
             </NewCard>
             <NewCard aside>
               <Card.Body>
                 <h4>
-                  <NewCardTitle className="title-box">
-                    Who made it <FontAwesomeIcon icon={faQuestion} />
+                  <NewCardTitle className="title-box" style={{ color: '#99A0AB' }}>
+                    {t('home.who_made_title')} <FontAwesomeIcon icon={faQuestion} />
                   </NewCardTitle>
                 </h4>
                 <NewCardBody>
-                  Many have contributed to the development, thinking, brainstorming, creation and availability of this tool. Unfortunately there is no way to get all names here. However, i will try to bring the main minds behind VSDBM and it´s tools.
+                  {t('home.who_made_text')}
                   <ul>
-                    <li>Helton Fábio - Developer</li>
-                    <li>Irahe Kasprzykowski - Developer</li>
-                    <li>Artur Queiroz - Scientific Advisor</li>
+                    <li>{t('home.who_made_list.dev_1')}</li>
+                    <li>{t('home.who_made_list.dev_2')}</li>
+                    <li>{t('home.who_made_list.advisor')}</li>
                   </ul>
-                    The Backend module runs all analysis on a week or demand basis. This module collect all new sequences from main primary biological databases; Process it by mapping it with the complete annotated genome; Subtyping it using subtype groups pre-determined in literature and map all epitopes contained in IEDB. All data is stored in Database model and can be accessed by the frontend via REST services.
                 </NewCardBody>
               </Card.Body>
             </NewCard>
@@ -57,24 +58,24 @@ export default function Home() {
             <NewCard aside>
               <Card.Body>
                 <h4>
-                  <NewCardTitle className="title-box">
-                    How can i contribute <FontAwesomeIcon icon={faQuestion} />
+                  <NewCardTitle className="title-box" style={{ color: '#99A0AB' }}>
+                    {t('home.how_contribute_title')} <FontAwesomeIcon icon={faQuestion} />
                   </NewCardTitle>
                 </h4>
                 <NewCardBody>
-                  Please contact our main researcher at <a href="mailto:heltonfabio@outlook.com">heltonfabio@outlook.com</a>
+                  {t('home.how_contribute_text')} <a href="mailto:heltonfabio@outlook.com">heltonfabio@outlook.com</a>
                 </NewCardBody>
               </Card.Body>
             </NewCard>
             <NewCard aside>
               <Card.Body>
                 <h4>
-                  <NewCardTitle className="title-box">
-                    Who maintain it <FontAwesomeIcon icon={faQuestion} />
+                  <NewCardTitle className="title-box" style={{ color: '#99A0AB' }}>
+                    {t('home.who_maintain_title')} <FontAwesomeIcon icon={faQuestion} />
                   </NewCardTitle>
                 </h4>
                 <NewCardBody>
-                  This software is maintained by PAH (High throughput Analysis Platform) group in association with FIOCRUZ (Oswaldo Cruz Foundation) - BA
+                  {t('home.who_maintain_text')}
                 </NewCardBody>
               </Card.Body>
             </NewCard>

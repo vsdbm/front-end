@@ -1,0 +1,111 @@
+{
+  "menu": {
+    "home": "Home",
+    "database_status": "Database Status",
+    "sequence_mapping": "Sequence Mapping",
+    "sequence_subtyping": "Sequence Subtyping",
+    "epitopes": "Epitopes",
+    "tools": "Tools",
+    "retrieve_data": "Retrieve Data",
+    "process_data": "Process Data"
+  },
+  "home": {
+    "title": "VSDBM - Viral Sequence Database Manager",
+    "what_is_title": "What is VSDBM",
+    "what_is_text_1": "VSDBM is a high performance hybrid multi-platform multi-language tool to collect, analise and store viral genomic sequences on demand. It is composed of three main modules:",
+    "what_is_list": {
+      "backend": "Backend module",
+      "database": "Database module",
+      "frontend": "Frontend module"
+    },
+    "what_is_text_2": "The Backend module runs all analysis on a week or demand basis. This module collect all new sequences from main primary biological databases; Process it by mapping it with the complete annotated genome; Subtyping it using subtype groups pre-determined in literature and map all epitopes contained in IEDB. All data is stored in Database model and can be accessed by the frontend via REST services.",
+    "who_made_title": "Who made it",
+    "who_made_text": "Many have contributed to the development, thinking, brainstorming, creation and availability of this tool. Unfortunately there is no way to get all names here. However, i will try to bring the main minds behind VSDBM and it´s tools.",
+    "who_made_list": {
+      "dev_1": "Helton Fábio - Developer",
+      "dev_2": "Irahe Kasprzykowski - Developer",
+      "advisor": "Artur Queiroz - Scientific Advisor"
+    },
+    "how_contribute_title": "How can i contribute",
+    "how_contribute_text": "Please contact our main researcher at",
+    "who_maintain_title": "Who maintain it",
+    "who_maintain_text": "This software is maintained by PAH (High throughput Analysis Platform) group in association with FIOCRUZ (Oswaldo Cruz Foundation) - BA"
+  },
+  "database_status": {
+    "title": "Database Growth",
+    "sequence_submission": "Sequence Submission",
+    "select_virus": "Select a virus:",
+    "select_virus_placeholder": "Select a virus...",
+    "coverage_info": "The sequences have an average of {{coverage}}% coverage in the reference sequence",
+    "features_info": "At this moment we have a total of {{count}} sequence features/translations",
+    "epitopes_info": "We have annotated {{annotated}} epitopes, but we have also {{iedb}} epitopes which came from IEDB which gave us this information about our epitope annotations:",
+    "b_cell_studies": "{{count}} epitopes had studies for B cell",
+    "t_cell_studies": "{{count}} epitopes had studies for T cell",
+    "mhc_studies": "{{count}} epitopes had studies for MHC",
+    "pandemic_beginning": "pandemic beginning",
+    "select_organism": "Select an organism"
+  },
+  "sequence_mapping": {
+    "title": "Sequence mapping",
+    "info": "Here goes the infos"
+  },
+  "sequence_subtyping": {
+    "title": "Sequence subtyping",
+    "info": "Here goes the infos"
+  },
+  "epitopes": {
+    "select_virus": "Select a virus:",
+    "select_virus_placeholder": "Select a virus...",
+    "top_epitopes": "Top Epitopes",
+    "only_with_assays": "Only with assays",
+    "data_for": "Data for {{name}}",
+    "hits": "Hits: {{count}}",
+    "b_cell": "B cell",
+    "t_cell": "T cell",
+    "mhc": "MHC"
+  },
+  "process_data": {
+    "title": "Process mappings",
+    "enable_process": "Enable process",
+    "disable_process": "Disable process",
+    "connection_status": "Connection status:",
+    "connected_clients": "Connected clients: {{count}}",
+    "latency": "latency:",
+    "works_per_time": "works per time: {{count}}",
+    "running_works": "running now {{count}} works",
+    "elapsed_time": "Elapsed time from last work force: {{seconds}} seconds",
+    "thank_you": "Thank you for your computational effort, you already did:",
+    "global_alignment": "Global alignment: {{count}}",
+    "subtyping": "Subtyping: {{count}}",
+    "epitope_maps": "Epitope maps: {{count}}",
+    "worker_mapping": "Worker #{{index}} - Mapping {{label}}",
+    "labels": {
+      "local_mapping": "sequence subtype",
+      "global_mapping": "sequence global alignment",
+      "epitope_mapping": "epitope"
+    }
+  },
+  "login": {
+    "error_empty": "Please, insert your credentials",
+    "error_verify": "Please, verify your credentials",
+    "error_generic": "You had an error:",
+    "forgot_alert": "You cannot lose what you do not have. ;)",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "remember_me": "Remember me",
+    "login_button": "Login",
+    "forgot_password": "Forgot your password?"
+  },
+  "chart": {
+    "amount": "Amount",
+    "this_period": "This period",
+    "cumulative": "Cumulative",
+    "select_organism": "Select an organism"
+  },
+  "ping": {
+    "good": "🚀 good",
+    "ok": "🙏 ok",
+    "bad": "🙅‍♂️ bad",
+    "clock_error": "we may have a problem to evaluate your ping (try updating your operational system clock)"
+  }
+}

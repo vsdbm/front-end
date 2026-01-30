@@ -1,0 +1,111 @@
+{
+  "menu": {
+    "home": "Início",
+    "database_status": "Status do Banco de Dados",
+    "sequence_mapping": "Mapeamento de Sequências",
+    "sequence_subtyping": "Subtipagem de Sequências",
+    "epitopes": "Epítopos",
+    "tools": "Ferramentas",
+    "retrieve_data": "Recuperar Dados",
+    "process_data": "Processar Dados"
+  },
+  "home": {
+    "title": "VSDBM - Gerenciador de Banco de Dados de Sequências Virais",
+    "what_is_title": "O que é o VSDBM",
+    "what_is_text_1": "O VSDBM é uma ferramenta híbrida multiplataforma e multilíngue de alto desempenho para coletar, analisar e armazenar sequências genômicas virais sob demanda. É composto por três módulos principais:",
+    "what_is_list": {
+      "backend": "Módulo Backend",
+      "database": "Módulo de Banco de Dados",
+      "frontend": "Módulo Frontend"
+    },
+    "what_is_text_2": "O módulo Backend executa todas as análises semanalmente ou sob demanda. Este módulo coleta todas as novas sequências das principais bases de dados biológicas primárias; Processa mapeando com o genoma anotado completo; Realiza a subtipagem usando grupos de subtipos pré-determinados na literatura e mapeia todos os epítopos contidos no IEDB. Todos os dados são armazenados no modelo de Banco de Dados e podem ser acessados pelo frontend via serviços REST.",
+    "who_made_title": "Quem fez",
+    "who_made_text": "Muitos contribuíram para o desenvolvimento, pensamento, brainstorming, criação e disponibilidade desta ferramenta. Infelizmente, não há como colocar todos os nomes aqui. No entanto, tentarei trazer as principais mentes por trás do VSDBM e suas ferramentas.",
+    "who_made_list": {
+      "dev_1": "Helton Fábio - Desenvolvedor",
+      "dev_2": "Irahe Kasprzykowski - Desenvolvedor",
+      "advisor": "Artur Queiroz - Orientador Científico"
+    },
+    "how_contribute_title": "Como posso contribuir",
+    "how_contribute_text": "Por favor, entre em contato com nosso pesquisador principal em",
+    "who_maintain_title": "Quem mantém",
+    "who_maintain_text": "Este software é mantido pelo grupo PAH (Plataforma de Análise de Alto Rendimento) em associação com a FIOCRUZ (Fundação Oswaldo Cruz) - BA"
+  },
+  "database_status": {
+    "title": "Crescimento do Banco de Dados",
+    "sequence_submission": "Submissão de Sequências",
+    "select_virus": "Selecione um vírus:",
+    "select_virus_placeholder": "Selecione um vírus...",
+    "coverage_info": "As sequências têm uma média de {{coverage}}% de cobertura na sequência de referência",
+    "features_info": "Neste momento temos um total de {{count}} características/traduções de sequência",
+    "epitopes_info": "Anotamos {{annotated}} epítopos, mas também temos {{iedb}} epítopos provenientes do IEDB que nos deram estas informações sobre nossas anotações:",
+    "b_cell_studies": "{{count}} epítopos tiveram estudos para células B",
+    "t_cell_studies": "{{count}} epítopos tiveram estudos para células T",
+    "mhc_studies": "{{count}} epítopos tiveram estudos para MHC",
+    "pandemic_beginning": "início da pandemia",
+    "select_organism": "Selecione um organismo"
+  },
+  "sequence_mapping": {
+    "title": "Mapeamento de sequência",
+    "info": "Aqui vão as informações"
+  },
+  "sequence_subtyping": {
+    "title": "Subtipagem de sequência",
+    "info": "Aqui vão as informações"
+  },
+  "epitopes": {
+    "select_virus": "Selecione um vírus:",
+    "select_virus_placeholder": "Selecione um vírus...",
+    "top_epitopes": "Principais Epítopos",
+    "only_with_assays": "Apenas com ensaios",
+    "data_for": "Dados para {{name}}",
+    "hits": "Ocorrências: {{count}}",
+    "b_cell": "Célula B",
+    "t_cell": "Célula T",
+    "mhc": "MHC"
+  },
+  "process_data": {
+    "title": "Processar mapeamentos",
+    "enable_process": "Habilitar processo",
+    "disable_process": "Desabilitar processo",
+    "connection_status": "Status da conexão:",
+    "connected_clients": "Clientes conectados: {{count}}",
+    "latency": "latência:",
+    "works_per_time": "trabalhos por vez: {{count}}",
+    "running_works": "rodando agora {{count}} trabalhos",
+    "elapsed_time": "Tempo decorrido desde a última força de trabalho: {{seconds}} segundos",
+    "thank_you": "Obrigado pelo seu esforço computacional, você já fez:",
+    "global_alignment": "Alinhamento global: {{count}}",
+    "subtyping": "Subtipagem: {{count}}",
+    "epitope_maps": "Mapas de epítopos: {{count}}",
+    "worker_mapping": "Trabalhador #{{index}} - Mapeando {{label}}",
+    "labels": {
+      "local_mapping": "subtipo de sequência",
+      "global_mapping": "alinhamento global de sequência",
+      "epitope_mapping": "epítopo"
+    }
+  },
+  "login": {
+    "error_empty": "Por favor, insira suas credenciais",
+    "error_verify": "Por favor, verifique suas credenciais",
+    "error_generic": "Você teve um erro:",
+    "forgot_alert": "Você não pode perder o que não tem. ;)",
+    "email_placeholder": "E-mail",
+    "password_placeholder": "Senha",
+    "remember_me": "Lembrar-me",
+    "login_button": "Entrar",
+    "forgot_password": "Esqueceu sua senha?"
+  },
+  "chart": {
+    "amount": "Quantidade",
+    "this_period": "Neste período",
+    "cumulative": "Acumulado",
+    "select_organism": "Selecione um organismo"
+  },
+  "ping": {
+    "good": "🚀 bom",
+    "ok": "🙏 ok",
+    "bad": "🙅‍♂️ ruim",
+    "clock_error": "podemos ter um problema para avaliar seu ping (tente atualizar o relógio do seu sistema operacional)"
+  }
+}

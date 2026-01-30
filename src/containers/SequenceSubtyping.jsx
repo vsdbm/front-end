@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Container, Card } from 'react-bootstrap';
 import PageHeader from '../components/PageTitle';
 
@@ -6,15 +7,16 @@ import styled from 'styled-components';
 import colors from '../static/colors.js';
 
 export default function SequenceSubtyping() {
+  const { t } = useTranslation();
   return (
     <Container className="mb-5 my-5">
       <PageHeader text="VSDBM - Viral Sequence Database Manager" />
       <BlackCard>
         <Card.Header>
-          <CardTitle>Sequence subtyping</CardTitle>
+          <CardTitle>{t('sequence_subtyping.title')}</CardTitle>
         </Card.Header>
         <Card.Body>
-          Here goes the infos
+          {t('sequence_subtyping.info')}
         </Card.Body>
       </BlackCard>
     </Container>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const PingSpan = ({ client }) => {
+    const { t } = useTranslation();
     const [latency, setLatency] = useState(0);
     const [problem, setProblem] = useState(0);
     useEffect(() => {
@@ -32,14 +34,13 @@ const PingSpan = ({ client }) => {
         <>
             <span>
                 {latency}ms{" "}
-                {latency < 51 ? "🚀 good" : latency < 301 ? "🙏 ok" : "🙅‍♂️ bad"}
+                {latency < 51 ? t('ping.good') : latency < 301 ? t('ping.ok') : t('ping.bad')}
             </span>
             {problem ? (
                 <>
                     <br />
                     <small style={{ color: "#FDFD96" }}>
-                        we may have a problem to evaluate your ping (try updating your
-                        operational system clock)
+                        {t('ping.clock_error')}
                     </small>
                 </>
             ) : (

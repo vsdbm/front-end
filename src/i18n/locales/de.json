@@ -1,0 +1,111 @@
+{
+  "menu": {
+    "home": "Startseite",
+    "database_status": "Datenbankstatus",
+    "sequence_mapping": "Sequenzkartierung",
+    "sequence_subtyping": "Sequenzsubtypisierung",
+    "epitopes": "Epitope",
+    "tools": "Werkzeuge",
+    "retrieve_data": "Daten abrufen",
+    "process_data": "Daten verarbeiten"
+  },
+  "home": {
+    "title": "VSDBM - Manager für virale Sequenzdatenbanken",
+    "what_is_title": "Was ist VSDBM",
+    "what_is_text_1": "VSDBM ist ein leistungsstarkes hybrides Multiplattform- und Mehrsprachen-Tool zum Sammeln, Analysieren und Speichern viraler genomischer Sequenzen auf Abruf. Es besteht aus drei Hauptmodulen:",
+    "what_is_list": {
+      "backend": "Backend-Modul",
+      "database": "Datenbank-Modul",
+      "frontend": "Frontend-Modul"
+    },
+    "what_is_text_2": "Das Backend-Modul führt alle Analysen wöchentlich oder auf Abruf durch. Dieses Modul sammelt alle neuen Sequenzen aus den primären biologischen Datenbanken; Verarbeitet sie durch Mapping mit dem vollständig annotierten Genom; Subtypisiert sie unter Verwendung von in der Literatur vorbestimmten Subtypgruppen und kartiert alle im IEDB enthaltenen Epitope. Alle Daten werden im Datenbankmodell gespeichert und können über das Frontend via REST-Dienste abgerufen werden.",
+    "who_made_title": "Wer hat es gemacht",
+    "who_made_text": "Viele haben zur Entwicklung, zum Denken, Brainstorming, zur Erstellung und Verfügbarkeit dieses Tools beigetragen. Leider gibt es keine Möglichkeit, hier alle Namen zu nennen. Ich werde jedoch versuchen, die wichtigsten Köpfe hinter VSDBM und seinen Tools vorzustellen.",
+    "who_made_list": {
+      "dev_1": "Helton Fábio - Entwickler",
+      "dev_2": "Irahe Kasprzykowski - Entwickler",
+      "advisor": "Artur Queiroz - Wissenschaftlicher Berater"
+    },
+    "how_contribute_title": "Wie kann ich beitragen",
+    "how_contribute_text": "Bitte kontaktieren Sie unseren Hauptforscher unter",
+    "who_maintain_title": "Wer pflegt es",
+    "who_maintain_text": "Diese Software wird von der PAH-Gruppe (High throughput Analysis Platform) in Zusammenarbeit mit FIOCRUZ (Oswaldo Cruz Foundation) - BA gepflegt."
+  },
+  "database_status": {
+    "title": "Datenbankwachstum",
+    "sequence_submission": "Sequenzeinreichung",
+    "select_virus": "Wählen Sie ein Virus:",
+    "select_virus_placeholder": "Wählen Sie ein Virus...",
+    "coverage_info": "Die Sequenzen haben eine durchschnittliche Abdeckung von {{coverage}}% in der Referenzsequenz",
+    "features_info": "Derzeit haben wir insgesamt {{count}} Sequenzmerkmale/Übersetzungen",
+    "epitopes_info": "Wir haben {{annotated}} Epitope annotiert, aber wir haben auch {{iedb}} Epitope aus der IEDB, die uns diese Informationen über unsere Epitop-Annotationen gegeben haben:",
+    "b_cell_studies": "{{count}} Epitope hatten Studien für B-Zellen",
+    "t_cell_studies": "{{count}} Epitope hatten Studien für T-Zellen",
+    "mhc_studies": "{{count}} Epitope hatten Studien für MHC",
+    "pandemic_beginning": "Pandemiebeginn",
+    "select_organism": "Wählen Sie einen Organismus"
+  },
+  "sequence_mapping": {
+    "title": "Sequenzkartierung",
+    "info": "Hier kommen die Infos"
+  },
+  "sequence_subtyping": {
+    "title": "Sequenzsubtypisierung",
+    "info": "Hier kommen die Infos"
+  },
+  "epitopes": {
+    "select_virus": "Wählen Sie ein Virus:",
+    "select_virus_placeholder": "Wählen Sie ein Virus...",
+    "top_epitopes": "Top-Epitope",
+    "only_with_assays": "Nur mit Assays",
+    "data_for": "Daten für {{name}}",
+    "hits": "Treffer: {{count}}",
+    "b_cell": "B-Zelle",
+    "t_cell": "T-Zelle",
+    "mhc": "MHC"
+  },
+  "process_data": {
+    "title": "Mappings verarbeiten",
+    "enable_process": "Prozess aktivieren",
+    "disable_process": "Prozess deaktivieren",
+    "connection_status": "Verbindungsstatus:",
+    "connected_clients": "Verbundene Clients: {{count}}",
+    "latency": "Latenz:",
+    "works_per_time": "Arbeiten pro Zeit: {{count}}",
+    "running_works": "läuft jetzt {{count}} Arbeiten",
+    "elapsed_time": "Verstrichene Zeit seit der letzten Arbeitskraft: {{seconds}} Sekunden",
+    "thank_you": "Danke für Ihren Rechenaufwand, Sie haben bereits erledigt:",
+    "global_alignment": "Globales Alignment: {{count}}",
+    "subtyping": "Subtypisierung: {{count}}",
+    "epitope_maps": "Epitopkarten: {{count}}",
+    "worker_mapping": "Worker #{{index}} - Mapping {{label}}",
+    "labels": {
+      "local_mapping": "Sequenzsubtyp",
+      "global_mapping": "Globales Sequenzalignment",
+      "epitope_mapping": "Epitop"
+    }
+  },
+  "login": {
+    "error_empty": "Bitte geben Sie Ihre Zugangsdaten ein",
+    "error_verify": "Bitte überprüfen Sie Ihre Zugangsdaten",
+    "error_generic": "Es ist ein Fehler aufgetreten:",
+    "forgot_alert": "Sie können nicht verlieren, was Sie nicht haben. ;)",
+    "email_placeholder": "E-Mail",
+    "password_placeholder": "Passwort",
+    "remember_me": "Erinnere dich an mich",
+    "login_button": "Anmelden",
+    "forgot_password": "Passwort vergessen?"
+  },
+  "chart": {
+    "amount": "Menge",
+    "this_period": "Dieser Zeitraum",
+    "cumulative": "Kumulativ",
+    "select_organism": "Wählen Sie einen Organismus"
+  },
+  "ping": {
+    "good": "🚀 gut",
+    "ok": "🙏 ok",
+    "bad": "🙅‍♂️ schlecht",
+    "clock_error": "Wir haben möglicherweise ein Problem bei der Bewertung Ihres Pings (versuchen Sie, Ihre Betriebssystemuhr zu aktualisieren)"
+  }
+}

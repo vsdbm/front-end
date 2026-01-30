@@ -1,0 +1,111 @@
+{
+  "menu": {
+    "home": "Inicio",
+    "database_status": "Estado de la Base de Datos",
+    "sequence_mapping": "Mapeo de Secuencias",
+    "sequence_subtyping": "Subtipificación de Secuencias",
+    "epitopes": "Epítopos",
+    "tools": "Herramientas",
+    "retrieve_data": "Recuperar Datos",
+    "process_data": "Procesar Datos"
+  },
+  "home": {
+    "title": "VSDBM - Gestor de Bases de Datos de Secuencias Virales",
+    "what_is_title": "¿Qué es VSDBM?",
+    "what_is_text_1": "VSDBM es una herramienta híbrida multiplataforma y multilenguaje de alto rendimiento para recolectar, analizar y almacenar secuencias genómicas virales bajo demanda. Se compone de tres módulos principales:",
+    "what_is_list": {
+      "backend": "Módulo Backend",
+      "database": "Módulo de Base de Datos",
+      "frontend": "Módulo Frontend"
+    },
+    "what_is_text_2": "El módulo Backend ejecuta todos los análisis semanalmente o bajo demanda. Este módulo recolecta todas las nuevas secuencias de las principales bases de datos biológicas primarias; Las procesa mapeándolas con el genoma anotado completo; Las subtipifica usando grupos de subtipos predeterminados en la literatura y mapea todos los epítopos contenidos en IEDB. Todos los datos se almacenan en el modelo de base de datos y se puede acceder a ellos mediante el frontend a través de servicios REST.",
+    "who_made_title": "¿Quién lo hizo?",
+    "who_made_text": "Muchos han contribuido al desarrollo, pensamiento, lluvia de ideas, creación y disponibilidad de esta herramienta. Desafortunadamente, no hay forma de poner todos los nombres aquí. Sin embargo, intentaré mencionar a las principales mentes detrás de VSDBM y sus herramientas.",
+    "who_made_list": {
+      "dev_1": "Helton Fábio - Desarrollador",
+      "dev_2": "Irahe Kasprzykowski - Desarrollador",
+      "advisor": "Artur Queiroz - Asesor Científico"
+    },
+    "how_contribute_title": "¿Cómo puedo contribuir?",
+    "how_contribute_text": "Por favor contacte a nuestro investigador principal en",
+    "who_maintain_title": "¿Quién lo mantiene?",
+    "who_maintain_text": "Este software es mantenido por el grupo PAH (Plataforma de Análisis de Alto Rendimiento) en asociación con FIOCRUZ (Fundación Oswaldo Cruz) - BA"
+  },
+  "database_status": {
+    "title": "Crecimiento de la Base de Datos",
+    "sequence_submission": "Envío de Secuencias",
+    "select_virus": "Seleccione un virus:",
+    "select_virus_placeholder": "Seleccione un virus...",
+    "coverage_info": "Las secuencias tienen un promedio de {{coverage}}% de cobertura en la secuencia de referencia",
+    "features_info": "En este momento tenemos un total de {{count}} características/traducciones de secuencias",
+    "epitopes_info": "Hemos anotado {{annotated}} epítopos, pero también tenemos {{iedb}} epítopos que provienen del IEDB, lo que nos dio esta información sobre nuestras anotaciones:",
+    "b_cell_studies": "{{count}} epítopos tuvieron estudios para células B",
+    "t_cell_studies": "{{count}} epítopos tuvieron estudios para células T",
+    "mhc_studies": "{{count}} epítopos tuvieron estudios para MHC",
+    "pandemic_beginning": "inicio de la pandemia",
+    "select_organism": "Seleccione un organismo"
+  },
+  "sequence_mapping": {
+    "title": "Mapeo de secuencias",
+    "info": "Aquí va la información"
+  },
+  "sequence_subtyping": {
+    "title": "Subtipificación de secuencias",
+    "info": "Aquí va la información"
+  },
+  "epitopes": {
+    "select_virus": "Seleccione un virus:",
+    "select_virus_placeholder": "Seleccione un virus...",
+    "top_epitopes": "Principales Epítopos",
+    "only_with_assays": "Solo con ensayos",
+    "data_for": "Datos para {{name}}",
+    "hits": "Aciertos: {{count}}",
+    "b_cell": "Célula B",
+    "t_cell": "Célula T",
+    "mhc": "MHC"
+  },
+  "process_data": {
+    "title": "Procesar mapeos",
+    "enable_process": "Habilitar proceso",
+    "disable_process": "Desabilitar proceso",
+    "connection_status": "Estado de la conexión:",
+    "connected_clients": "Clientes conectados: {{count}}",
+    "latency": "latencia:",
+    "works_per_time": "trabajos por vez: {{count}}",
+    "running_works": "ejecutando ahora {{count}} trabajos",
+    "elapsed_time": "Tiempo transcurrido desde la última fuerza de trabajo: {{seconds}} segundos",
+    "thank_you": "Gracias por su esfuerzo computacional, ya ha realizado:",
+    "global_alignment": "Alineamiento global: {{count}}",
+    "subtyping": "Subtipificación: {{count}}",
+    "epitope_maps": "Mapas de epítopos: {{count}}",
+    "worker_mapping": "Trabajador #{{index}} - Mapeando {{label}}",
+    "labels": {
+      "local_mapping": "subtipo de secuencia",
+      "global_mapping": "alineamiento global de secuencia",
+      "epitope_mapping": "epítopo"
+    }
+  },
+  "login": {
+    "error_empty": "Por favor, introduzca sus credenciales",
+    "error_verify": "Por favor, verifique sus credenciales",
+    "error_generic": "Tuvo un error:",
+    "forgot_alert": "No puedes perder lo que no tienes. ;)",
+    "email_placeholder": "Correo electrónico",
+    "password_placeholder": "Contraseña",
+    "remember_me": "Recuérdame",
+    "login_button": "Iniciar sesión",
+    "forgot_password": "¿Olvidaste tu contraseña?"
+  },
+  "chart": {
+    "amount": "Cantidad",
+    "this_period": "Este período",
+    "cumulative": "Acumulado",
+    "select_organism": "Seleccione un organismo"
+  },
+  "ping": {
+    "good": "🚀 bueno",
+    "ok": "🙏 ok",
+    "bad": "🙅‍♂️ malo",
+    "clock_error": "podemos tener un problema para evaluar su ping (intente actualizar el reloj de su sistema operativo)"
+  }
+}

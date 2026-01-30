@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next';
-import { Container, Row, Col, Card, Form, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import api from '../services/api.js';
@@ -120,6 +120,14 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
 
   return (
     <Container className="mb-5 my-5" >
+      <style type="text/css">
+        {`
+        .wide-tooltip .tooltip-inner {
+          max-width: 50vw !important;
+          text-align: left;
+        }
+        `}
+      </style>
       <PageHeader text="VSDBM - Viral Sequence Database Manager" />
       <Row className="md-2 my-4">
         <Col md="3"></Col>
@@ -204,7 +212,25 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                               <ul>
                                 {[...epitope.bcell_assays].map((bcell, index) =>
                                   <li style={{ color: '#fff' }} key={index}>
-                                    <p style={{ display: 'inline-block', cursor: 'pointer' }} title={bcell.comment}>{bcell.organism_name || ''} - {bcell.result} {(bcell.comment) ? `- ${bcell.comment.substring(0, 25)}...` : ''}</p> </li>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip className="wide-tooltip" id={`bcell-tooltip-${index}`}>
+                                        {bcell.organism_name || ''} - {bcell.result} {(bcell.comment) ? `- ${bcell.comment}` : ''}
+                                      </Tooltip>}
+                                    >
+                                      <p style={{
+                                        display: 'inline-block',
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        maxWidth: '800px',
+                                        marginBottom: 0
+                                      }}>
+                                        {bcell.organism_name || ''} - {bcell.result} {(bcell.comment) ? `- ${bcell.comment}` : ''}
+                                      </p>
+                                    </OverlayTrigger>
+                                  </li>
                                 )}
                               </ul>
                             </Col>
@@ -215,7 +241,25 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                               <ul>
                                 {[...epitope.tcell_assays].map((tcell, index) =>
                                   <li style={{ color: '#fff' }} key={index}>
-                                    <p style={{ display: 'inline-block', cursor: 'pointer' }} title={tcell.comment}>{tcell.organism_name || ''} - {tcell.result} {(tcell.comment) ? `- ${tcell.comment.substring(0, 25)}...` : ''}</p> </li>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip className="wide-tooltip" id={`tcell-tooltip-${index}`}>
+                                        {tcell.organism_name || ''} - {tcell.result} {(tcell.comment) ? `- ${tcell.comment}` : ''}
+                                      </Tooltip>}
+                                    >
+                                      <p style={{
+                                        display: 'inline-block',
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        maxWidth: '800px',
+                                        marginBottom: 0
+                                      }}>
+                                        {tcell.organism_name || ''} - {tcell.result} {(tcell.comment) ? `- ${tcell.comment}` : ''}
+                                      </p>
+                                    </OverlayTrigger>
+                                  </li>
                                 )}
                               </ul>
                             </Col>
@@ -225,7 +269,26 @@ function Epitopes({ response, virus, setVirus, userToken, epitopes }) {
                               <span style={{ color: '#fff', fontWeight: 'bold' }}>{t('epitopes.mhc')}</span>
                               <ul>
                                 {[...epitope.mhc_assays].map((mhc, index) =>
-                                  <li style={{ color: '#fff' }} key={index}><b>{mhc.allele_name}</b> - {mhc.result} - {mhc.value} nM</li>
+                                  <li style={{ color: '#fff' }} key={index}>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip className="wide-tooltip" id={`mhc-tooltip-${index}`}>
+                                        <b>{mhc.allele_name}</b> - {mhc.result} - {mhc.value} nM
+                                      </Tooltip>}
+                                    >
+                                      <p style={{
+                                        display: 'inline-block',
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        maxWidth: '800px',
+                                        marginBottom: 0
+                                      }}>
+                                        <b>{mhc.allele_name}</b> - {mhc.result} - {mhc.value} nM
+                                      </p>
+                                    </OverlayTrigger>
+                                  </li>
                                 )}
                               </ul>
                             </Col>
